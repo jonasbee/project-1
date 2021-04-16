@@ -18,9 +18,56 @@ body {
   flex-wrap: wrap;
 }
 .grid div {
-  border: 5px solid green;
+  border: 1px solid green;
 }
   
 .number {
-  background-color: green;
+  border: 5px solid blue;
 }
+
+/* could also be added via JavaScript as a form of abstraction */
+/* "number 2" */
+/* .number \2 { */
+/* [class = 'number 2'] { */
+.number.\2 {  
+  background-color:rgb(231, 22, 162);
+  font-size: x-large;
+  color: aliceblue;
+}
+/* .\4 {
+  background-color: limegreen;
+  font-size: x-large;
+  color: aliceblue;
+} 
+.\8 {
+  background-color: forestgreen;
+  font-size: x-large;
+}
+.\16 {
+  background-color: darkgreen;
+  font-size: x-large;
+}
+.\32 {
+  background-color: rgb(1, 50, 8);
+  font-size: x-large;
+}
+.\64 {
+  background-color: darkslategray;
+  font-size: x-large;
+}
+.\128 {
+  background-color: deeppink;
+  font-size: x-large;
+}
+.\256 {
+  background-color: firebrick;
+  font-size: x-large;
+}
+.\1028 {
+  background-color: gold;
+  font-size: x-large;
+}
+.\2048 {
+  background-color: goldenrod;
+  font-size: x-large;
+}  */
