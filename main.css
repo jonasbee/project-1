@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0
+}
+.grid {
+  display: flex;
+  flex-direction: row;
+  border: 5px solid grey;
+  width: 600px;
+  height: 600px;
+  flex-wrap: wrap;
+}
+.grid div {
+  border: 5px solid green;
+}
+  
+.number {
+  background-color: green;
+}
