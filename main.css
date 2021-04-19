@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-family: 'Nunito sans';
 }
 body {
   height: 100vh;
@@ -23,17 +24,19 @@ body {
   
 .number {
   border: 5px solid blue;
+  font-size: x-large;
+  text-align: center;
 }
 
 /* could also be added via JavaScript as a form of abstraction */
 /* "number 2" */
 /* .number \2 { */
 /* [class = 'number 2'] { */
-.number.\2 {  
+/* .number.\2 {  
   background-color:rgb(231, 22, 162);
   font-size: x-large;
   color: aliceblue;
-}
+} */
 /* .\4 {
   background-color: limegreen;
   font-size: x-large;
