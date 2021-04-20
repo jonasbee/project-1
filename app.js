@@ -1,8 +1,10 @@
 // ! constructor
 const grid = document.querySelector('.grid')
 const startButton = document.querySelector('#start')
-const width = 4
-const cells = []
+const scoreScreen = document.querySelector('#score-screen')
+const gridSize = document.querySelector('#grid-size')
+let cells = []
+let width = 0
 let movement = false
 let possibility = true
 let arrayOfFreePos = []
@@ -10,6 +12,8 @@ let randomIndex = 0
 let keyChoice = null
 let tileA = null
 let tileB = null
+let score = 0
+let allowed = true
 
 const colors = {
   '2': 'lightgreen',
@@ -21,22 +25,34 @@ const colors = {
   '128': 'olivedrab',
   '256': 'darkolivegreen',
   '512': 'olive',
-  '1028': 'seagreen',
+  '1024': 'seagreen',
   '2048': 'crimson',
 }
 
-// build grid
-for (let index = 0; index < width ** 2; index++) {
-  const div = document.createElement('div')
-  grid.appendChild(div)
-  // show index in cells of grid
-  div.innerHTML = index
-  div.style.width = `${100 / width}%`
-  div.style.height = `${100 / width}%`
-  cells.push(div)
-}
-
 // ! functions
+
+// build grid
+function buildGrid() {
+  width = Number(gridSize.value)
+  while (grid.firstChild) {
+    grid.removeChild(grid.lastChild)
+  }
+  cells = []
+  for (let index = 0; index < width ** 2; index++) {
+    const div = document.createElement('div')
+    grid.appendChild(div)
+    // show index in cells of grid
+    // div.innerHTML = index
+    div.style.width = `${100 / width}%`
+    div.style.height = `${100 / width}%`
+    cells.push(div)
+  }
+}
+// cells.forEach(cell => {
+  //   cell.classList.remove('number')
+  //   cell.style.backgroundColor = ''
+  //   cell.innerHTML = ''
+  // })
 
 // create array with all indexes of free positions
 function getFreeTileIndeces() {
@@ -50,11 +66,28 @@ function getFreeTileIndeces() {
 
 function checkIf2048() {
   cells.forEach((cell) => {
-    if (cell.classList.contains('2048')) {
+    if (cell.innerHTML === '2048') {
       alert('Win')
     }
     return
   })
+}
+
+function seeIfThereArePossibilities() {
+  possibility = false
+  for (let index = 0; index < width; index++) {
+    checkTilesForButtonUp(index)
+  }
+  for (let index = width ** 2 - width; index < width ** 2; index++) {
+    checkTilesForButtonDown(index)
+  }
+  for (let index = width - 1; index < width ** 2; index += width) {
+    checkTilesForButtonRight(index)
+  }
+  for (let index = 0; index <= width ** 2 - width; index += width) {
+    checkTilesForButtonLeft(index)
+  }
+  return possibility
 }
 
 // get new random number
@@ -73,13 +106,104 @@ function addTileRandomly(tileNumber) {
   // console.dir(cells[randomIndex])
 }
 
+// * only chance left when all tiles numbered, is
+// * that at least two of them sum up
+
+function checkTilesForButtonUp(startIndex) {
+  // if boarder reached, return
+  if ((startIndex > (width ** 2) - width - 1)) {
+    return
+  }
+  tileA = cells[startIndex]
+  tileB = cells[startIndex + width]
+  // case two number tiles
+  if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
+    if (tileA.innerHTML === tileB.innerHTML) {
+      possibility = true
+      return
+    } else {
+      return checkTilesForButtonUp(startIndex + width)
+    }
+    // case first is none, second is tile
+  } else {
+    // case tileA number, tileB none & tileA none, tileB none
+    checkTilesForButtonUp(startIndex + width)
+  }
+}
+function checkTilesForButtonDown(startIndex) {
+  // if boarder reached, return
+  if (startIndex < width) {
+    return
+  }
+  tileA = cells[startIndex]
+  tileB = cells[startIndex - width]
+  // case two number tiles
+  if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
+    // case both tiles are the same
+    if (tileA.innerHTML === tileB.innerHTML) {
+      possibility = true
+      return
+    } else {
+      return checkTilesForButtonDown(startIndex - width)
+    }
+    // case first is none, second is tile
+  } else {
+    // case tileA number, tileB none & tileA none, tileB none
+    checkTilesForButtonDown(startIndex - width)
+  }
+}
+function checkTilesForButtonRight(startIndex) {
+  // if boarder reached, return
+  if ((startIndex % width) === 0) {
+    return
+  }
+  tileA = cells[startIndex]
+  tileB = cells[startIndex - 1]
+  // case two number tiles
+  if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
+    // case both tiles are the same
+    if (tileA.innerHTML === tileB.innerHTML) {
+      possibility = true
+      return
+    } else {
+      return checkTilesForButtonRight(startIndex - 1)
+    }
+    // case first is none, second is tile
+  } else {
+    // case tileA number, tileB none & tileA none, tileB none
+    checkTilesForButtonRight(startIndex - 1)
+  }
+}
+function checkTilesForButtonLeft(startIndex) {
+  // if boarder reached, return
+  if ((startIndex % width) === width - 1) {
+    return
+  }
+  tileA = cells[startIndex]
+  tileB = cells[startIndex + 1]
+  // case two number tiles
+  if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
+    // case both tiles are the same
+    if (tileA.innerHTML === tileB.innerHTML) {
+      possibility = true
+      return
+    } else {
+      return checkTilesForButtonLeft(startIndex + 1)
+    }
+    // case first is none, second is tile
+  } else {
+    // case tileA number, tileB none & tileA none, tileB none
+    checkTilesForButtonLeft(startIndex + 1)
+  }
+}
+
 function compareTwoTilesForButtonUp(startIndex) {
   // if boarder reached, return
   if ((startIndex > (width ** 2) - width - 1)) {
     return
   }
   tileA = cells[startIndex]
-  tileB = cells[startIndex + 4]
+  tileB = cells[startIndex + width]
   // case two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
     if (tileA.innerHTML === tileB.innerHTML) {
@@ -90,6 +214,8 @@ function compareTwoTilesForButtonUp(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      score += Number(tileA.innerHTML)
+      scoreScreen.innerHTML = score
       movement = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
@@ -97,18 +223,17 @@ function compareTwoTilesForButtonUp(startIndex) {
       // tileA.classList.remove(`${tileA.innerHTML}`)
       // tileA.classList.add(`${Number(tileA.innerHTML) * 2}`)
       if (!(startIndex < width)) {
-        compareTwoTilesForButtonUp(startIndex - 4)
+        compareTwoTilesForButtonUp(startIndex - width)
         return
       } else {
         compareTwoTilesForButtonUp(startIndex)
         return
       }
     } else {
-      return compareTwoTilesForButtonUp(startIndex + 4)
+      return compareTwoTilesForButtonUp(startIndex + width)
     }
     // case first is none, second is tile
   } else if (!tileA.classList.contains('number') && tileB.classList.contains('number')) {
-    console.dir(tileA)
     // tileA gets value of tileB
     tileA.classList.add('number')
     tileA.style.backgroundColor = colors[Number(tileB.innerHTML)]
@@ -121,23 +246,22 @@ function compareTwoTilesForButtonUp(startIndex) {
     // tileA.classList.add(`${tileB.innerHTML}`)
     // tileB.classList.remove(`${tileB.innerHTML}`)
     if (startIndex >= width) {
-      return compareTwoTilesForButtonUp(startIndex - 4)
+      return compareTwoTilesForButtonUp(startIndex - width)
     } else {
-      return compareTwoTilesForButtonUp(startIndex + 4)
+      return compareTwoTilesForButtonUp(startIndex + width)
     }
   } else {
-  // case tileA number, tileB none & tileA none, tileB none
-    compareTwoTilesForButtonUp(startIndex + 4)
+    // case tileA number, tileB none & tileA none, tileB none
+    compareTwoTilesForButtonUp(startIndex + width)
   }
 }
-
 function compareTwoTilesForButtonDown(startIndex) {
   // if boarder reached, return
   if (startIndex < width) {
     return
   }
   tileA = cells[startIndex]
-  tileB = cells[startIndex - 4]
+  tileB = cells[startIndex - width]
   // case two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
     // case both tiles are the same
@@ -149,6 +273,8 @@ function compareTwoTilesForButtonDown(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      score += Number(tileA.innerHTML)
+      scoreScreen.innerHTML = score
       movement = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
@@ -157,14 +283,14 @@ function compareTwoTilesForButtonDown(startIndex) {
       // tileA.classList.add(`${Number(tileA.innerHTML) * 2}`)
       // as long as bottom row not reached go further down
       if (!(startIndex > (width ** 2) - width - 1)) {
-        compareTwoTilesForButtonDown(startIndex + 4)
+        compareTwoTilesForButtonDown(startIndex + width)
         return
       } else {
         compareTwoTilesForButtonDown(startIndex)
         return
       }
     } else {
-      return compareTwoTilesForButtonDown(startIndex - 4)
+      return compareTwoTilesForButtonDown(startIndex - width)
     }
     // case first is none, second is tile
   } else if (!tileA.classList.contains('number') && tileB.classList.contains('number')) {
@@ -182,17 +308,16 @@ function compareTwoTilesForButtonDown(startIndex) {
 
     // as long as bottom not reached, see if tile can move further down
     if (!(startIndex > (width ** 2) - width - 1)) {
-      return compareTwoTilesForButtonDown(startIndex + 4)
+      return compareTwoTilesForButtonDown(startIndex + width)
     } else {
-    // if bottom reached (tile cannot be moved down further)
-      return compareTwoTilesForButtonDown(startIndex - 4)
+      // if bottom reached (tile cannot be moved down further)
+      return compareTwoTilesForButtonDown(startIndex - width)
     }
   } else {
-  // case tileA number, tileB none & tileA none, tileB none
-    compareTwoTilesForButtonDown(startIndex - 4)
+    // case tileA number, tileB none & tileA none, tileB none
+    compareTwoTilesForButtonDown(startIndex - width)
   }
 }
-
 function compareTwoTilesForButtonRight(startIndex) {
   // if boarder reached, return
   if ((startIndex % width) === 0) {
@@ -211,6 +336,8 @@ function compareTwoTilesForButtonRight(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      score += Number(tileA.innerHTML)
+      scoreScreen.innerHTML = score
       movement = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
@@ -246,15 +373,14 @@ function compareTwoTilesForButtonRight(startIndex) {
     if (!(startIndex % width === width - 1)) {
       return compareTwoTilesForButtonRight(startIndex + 1)
     } else {
-    // if bottom reached (tile cannot be moved down further)
+      // if bottom reached (tile cannot be moved down further)
       return compareTwoTilesForButtonRight(startIndex - 1)
     }
   } else {
-  // case tileA number, tileB none & tileA none, tileB none
+    // case tileA number, tileB none & tileA none, tileB none
     compareTwoTilesForButtonRight(startIndex - 1)
   }
 }
-
 function compareTwoTilesForButtonLeft(startIndex) {
   // if boarder reached, return
   if ((startIndex % width) === width - 1) {
@@ -273,6 +399,8 @@ function compareTwoTilesForButtonLeft(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      score += Number(tileA.innerHTML)
+      scoreScreen.innerHTML = score
       movement = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
@@ -308,30 +436,31 @@ function compareTwoTilesForButtonLeft(startIndex) {
     if (!(startIndex % width === 0)) {
       return compareTwoTilesForButtonLeft(startIndex - 1)
     } else {
-    // if bottom reached (tile cannot be moved down further)
+      // if bottom reached (tile cannot be moved down further)
       return compareTwoTilesForButtonLeft(startIndex + 1)
     }
   } else {
-  // case tileA number, tileB none & tileA none, tileB none
+    // case tileA number, tileB none & tileA none, tileB none
     compareTwoTilesForButtonLeft(startIndex + 1)
   }
 }
 
 function move(callback, startIndex, steps) {
-
-  if (!possibility) {
-    alert('Game Over!')
+  getFreeTileIndeces()
+  if (arrayOfFreePos.length === 0) {
+    if (!(seeIfThereArePossibilities())) {
+      alert('Game Over!')
+    }
   }
-  // perform tile comparison for each column
-
+  // perform tile comparison for each row/column (width times)
   for (let index = 0; index < width; index++) {
     callback(startIndex)
     startIndex += steps
-    console.log(index)
   }
-
   checkIf2048()
+}
 
+function addNewTileIfMovement() {
   if (movement) {
     getFreeTileIndeces()
     if (arrayOfFreePos.length !== 0) {
@@ -344,16 +473,12 @@ function move(callback, startIndex, steps) {
   }
 }
 
-// ! wrap whole execution in below
 startButton.addEventListener('click', (event) => {
 
   // ! Game Start: 
-  // ! first: remove all existing (forEach)
-  cells.forEach(cell => {
-    cell.classList.remove('number')
-    cell.style.backgroundColor = ''
-    cell.innerHTML = ''
-  })
+  // ! first: remove all existing (formerly forEach)
+  // ! & create the grid of specified size
+  buildGrid()
   // ! second: randomly add two tile2
   addTileRandomly(2)
   addTileRandomly(2)
@@ -361,19 +486,61 @@ startButton.addEventListener('click', (event) => {
   document.addEventListener('keydown', (event) => {
     keyChoice = event.key
     if (keyChoice === 'ArrowUp') {
+      if (event.repeat != undefined) {
+        allowed = !event.repeat
+      }
+      if (!allowed) return
+      allowed = false
       move(compareTwoTilesForButtonUp, 0, 1)
+      setTimeout(addNewTileIfMovement, 90)
     } else if (keyChoice === 'ArrowDown') {
+      if (event.repeat != undefined) {
+        allowed = !event.repeat
+      }
+      if (!allowed) return
+      allowed = false
       move(compareTwoTilesForButtonDown, (width ** 2 - width), 1)
+      setTimeout(addNewTileIfMovement, 90)
     } else if (keyChoice === 'ArrowRight') {
-      move(compareTwoTilesForButtonRight, (width - 1), 4)
+      if (event.repeat != undefined) {
+        allowed = !event.repeat
+      }
+      if (!allowed) return
+      allowed = false
+      move(compareTwoTilesForButtonRight, (width - 1), width)
+      setTimeout(addNewTileIfMovement, 90)
     } else if (keyChoice === 'ArrowLeft') {
-      move(compareTwoTilesForButtonLeft, 0, 4)
+      if (event.repeat != undefined) {
+        allowed = !event.repeat
+      }
+      if (!allowed) return
+      allowed = false
+      move(compareTwoTilesForButtonLeft, 0, width)
+      setTimeout(addNewTileIfMovement, 90)
+    }
+  })
+  document.addEventListener('keyup', (event) => {
+    keyChoice = event.key
+    if (keyChoice === 'ArrowUp') {
+      allowed = true
+    } else if (keyChoice === 'ArrowDown') {
+      allowed = true
+    } else if (keyChoice === 'ArrowRight') {
+      allowed = true
+    } else if (keyChoice === 'ArrowLeft') {
+      allowed = true
+    }
+  })
+  document.addEventListener('focus', (event) => {
+    keyChoice = event.key
+    if (keyChoice === 'ArrowUp') {
+      allowed = true
+    } else if (keyChoice === 'ArrowDown') {
+      allowed = true
+    } else if (keyChoice === 'ArrowRight') {
+      allowed = true
+    } else if (keyChoice === 'ArrowLeft') {
+      allowed = true
     }
   })
 })
-
-// function seeIfThereArePossibilities()
-// for loop 4 times // for each key, change function (up, down, left, right)
-// for loop 4 times // for each column/row
-// arrayOfFunctions[index]
-// return possibility 

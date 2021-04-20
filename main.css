@@ -14,18 +14,20 @@ body {
   display: flex;
   flex-direction: row;
   border: 5px solid grey;
+  border-radius: 5px;
   width: 600px;
   height: 600px;
   flex-wrap: wrap;
 }
 .grid div {
-  border: 1px solid green;
+  border: 5px solid grey;
+  border-radius: 0px;
 }
   
 .number {
-  border: 5px solid blue;
-  font-size: x-large;
+  font-size: 60px;
   text-align: center;
+  text-decoration: solid;
 }
 
 /* could also be added via JavaScript as a form of abstraction */
