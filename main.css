@@ -1,14 +1,88 @@
 * {
   box-sizing: border-box;
   font-family: 'Nunito sans';
+  /* background-color: aliceblue; */
 }
 body {
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   flex-direction: column;
-  margin: 0
+  margin: 0 auto;
+  max-width: 600px;
+}
+h2 {
+  font-size: 60px;
+}
+h6 {
+  font-size: 20px;
+}
+header {
+  display: flex;
+  flex-direction: row;
+}
+header section {
+  flex: 1;
+}
+/* spacing is saying any child of parent get that CSS rules */
+section.title {
+  margin-bottom: 25px;
+}
+section.game-options {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 40px;
+  margin-bottom:  30px;
+}
+div.score-panel {
+  display: flex;
+  flex-direction: row;
+}
+#grid-size-div {
+  padding: 5px;
+  background-color: green;
+  border-radius: 3px;
+  border: 3px solid green;
+  color: aliceblue;
+  font-size: 20px;
+}
+#grid-size {
+  width: 35px;
+  font-size: 20px;
+}
+#score-screen {
+  background-color: green;
+}
+#best-screen {
+  background-color: green;
+}
+#start {
+  padding: 5px;
+  background-color: green;
+  border-radius: 3px;
+  border: 3px solid green;
+  color: aliceblue;
+  font-size: 20px;
+}
+#score {
+  padding: 5px;
+  background-color: green;
+  border-radius: 3px;
+  border: 3px solid green;
+  color: aliceblue;
+  font-size: 20px;
+  margin-right: 20px;
+}
+#best {
+  padding: 5px;
+  background-color: green;
+  border-radius: 3px;
+  border: 3px solid green;
+  color: aliceblue;
+  font-size: 20px;
 }
 .grid {
   display: flex;
@@ -20,13 +94,26 @@ body {
   flex-wrap: wrap;
 }
 .grid div {
+  display: flex;
   border: 5px solid grey;
   border-radius: 0px;
+  justify-content: center;
+  align-items: center;
 }
-  
+.zoom-in {
+  animation-duration: .3s;
+  animation-name: zoom-in;
+}
+@keyframes zoom-in {
+  0%,100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
 .number {
   font-size: 60px;
-  text-align: center;
   text-decoration: solid;
 }
 

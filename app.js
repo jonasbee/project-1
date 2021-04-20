@@ -14,6 +14,7 @@ let tileA = null
 let tileB = null
 let score = 0
 let allowed = true
+let combined = false
 
 const colors = {
   '2': 'lightgreen',
@@ -49,10 +50,10 @@ function buildGrid() {
   }
 }
 // cells.forEach(cell => {
-  //   cell.classList.remove('number')
-  //   cell.style.backgroundColor = ''
-  //   cell.innerHTML = ''
-  // })
+//   cell.classList.remove('number')
+//   cell.style.backgroundColor = ''
+//   cell.innerHTML = ''
+// })
 
 // create array with all indexes of free positions
 function getFreeTileIndeces() {
@@ -197,6 +198,12 @@ function checkTilesForButtonLeft(startIndex) {
   }
 }
 
+function doAnimation(object) {
+  object.classList.remove('zoom-in')
+  object.classList.add('zoom-in')
+  setTimeout(() => { object.classList.remove('zoom-in') }, 300)
+}
+
 function compareTwoTilesForButtonUp(startIndex) {
   // if boarder reached, return
   if ((startIndex > (width ** 2) - width - 1)) {
@@ -206,7 +213,7 @@ function compareTwoTilesForButtonUp(startIndex) {
   tileB = cells[startIndex + width]
   // case two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
-    if (tileA.innerHTML === tileB.innerHTML) {
+    if (tileA.innerHTML === tileB.innerHTML && !combined) {
       // remove tileB
       tileB.classList.remove('number')
       tileB.style.backgroundColor = ''
@@ -214,9 +221,14 @@ function compareTwoTilesForButtonUp(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      // ! animation
+      // tileA.classList.add('zoom-in')
+      // setTimeout( () => {tileA.classList.remove('zoom-in')}, 1000)
+      doAnimation(tileA)
       score += Number(tileA.innerHTML)
-      scoreScreen.innerHTML = score
+      scoreScreen.innerHTML = ` ${score}`
       movement = true
+      combined = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
       // tileB.classList.remove(`${tileB.innerHTML}`)
@@ -265,7 +277,7 @@ function compareTwoTilesForButtonDown(startIndex) {
   // case two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
     // case both tiles are the same
-    if (tileA.innerHTML === tileB.innerHTML) {
+    if (tileA.innerHTML === tileB.innerHTML && !combined) {
       // remove tileB
       tileB.classList.remove('number')
       tileB.style.backgroundColor = ''
@@ -273,9 +285,11 @@ function compareTwoTilesForButtonDown(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      doAnimation(tileA)
       score += Number(tileA.innerHTML)
-      scoreScreen.innerHTML = score
+      scoreScreen.innerHTML = ` ${score}`
       movement = true
+      combined = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
       // tileB.classList.remove(`${tileB.innerHTML}`)
@@ -328,7 +342,7 @@ function compareTwoTilesForButtonRight(startIndex) {
   // case two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
     // case both tiles are the same
-    if (tileA.innerHTML === tileB.innerHTML) {
+    if (tileA.innerHTML === tileB.innerHTML && !combined) {
       // remove tileB
       tileB.classList.remove('number')
       tileB.style.backgroundColor = ''
@@ -336,9 +350,11 @@ function compareTwoTilesForButtonRight(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      doAnimation(tileA)
       score += Number(tileA.innerHTML)
-      scoreScreen.innerHTML = score
+      scoreScreen.innerHTML = ` ${score}`
       movement = true
+      combined = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
       // tileB.classList.remove(`${tileB.innerHTML}`)
@@ -391,7 +407,7 @@ function compareTwoTilesForButtonLeft(startIndex) {
   // case two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
     // case both tiles are the same
-    if (tileA.innerHTML === tileB.innerHTML) {
+    if (tileA.innerHTML === tileB.innerHTML && !combined) {
       // remove tileB
       tileB.classList.remove('number')
       tileB.style.backgroundColor = ''
@@ -399,9 +415,11 @@ function compareTwoTilesForButtonLeft(startIndex) {
       // change tileA
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
+      doAnimation(tileA)
       score += Number(tileA.innerHTML)
-      scoreScreen.innerHTML = score
+      scoreScreen.innerHTML = ` ${score}`
       movement = true
+      combined = true
       // ! test here before running
       // no ${} needed, because innerHTML is type string?
       // tileB.classList.remove(`${tileB.innerHTML}`)
@@ -456,6 +474,7 @@ function move(callback, startIndex, steps) {
   for (let index = 0; index < width; index++) {
     callback(startIndex)
     startIndex += steps
+    combined = false
   }
   checkIf2048()
 }
