@@ -7,7 +7,7 @@ body {
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: stretch;
+  /* align-items: stretch; */
   flex-direction: column;
   margin: 0 auto;
   max-width: 600px;
@@ -21,6 +21,7 @@ h6 {
 header {
   display: flex;
   flex-direction: row;
+  height: 30%;
 }
 header section {
   flex: 1;
@@ -35,7 +36,7 @@ section.game-options {
   justify-content: space-between;
   align-items: flex-end;
   margin-top: 40px;
-  margin-bottom:  30px;
+  margin-bottom:  25px;
 }
 div.score-panel {
   display: flex;
@@ -45,13 +46,16 @@ div.score-panel {
   padding: 5px;
   background-color: green;
   border-radius: 3px;
-  border: 3px solid green;
+  border: 1px solid green;
   color: aliceblue;
   font-size: 20px;
 }
 #grid-size {
-  width: 35px;
+  width: 45px;
   font-size: 20px;
+}
+#start-stop {
+  display: flex;
 }
 #start {
   padding: 5px;
@@ -61,11 +65,20 @@ div.score-panel {
   color: aliceblue;
   font-size: 20px;
 }
+#stop {
+  padding: 5px;
+  background-color: black;
+  border-radius: 3px;
+  border: 3px solid black;
+  color: aliceblue;
+  font-size: 20px;
+  margin-right: 20px;
+}
 #score {
   padding: 5px;
   background-color: green;
   border-radius: 3px;
-  border: 3px solid green;
+  border: 1px solid green;
   color: aliceblue;
   font-size: 20px;
   margin-right: 20px;
@@ -81,7 +94,7 @@ div.score-panel {
   padding: 5px;
   background-color: green;
   border-radius: 3px;
-  border: 3px solid green;
+  border: 1px solid green;
   color: aliceblue;
   font-size: 20px;
 }
@@ -95,16 +108,17 @@ div.score-panel {
 .grid {
   display: flex;
   flex-direction: row;
-  border: 5px solid grey;
+  border: 5px solid black;
   border-radius: 5px;
   width: 600px;
   height: 600px;
   flex-wrap: wrap;
   margin-bottom: 50px;
+  font-size: 60px;
 }
 .grid div {
   display: flex;
-  border: 5px solid grey;
+  border: 3px solid darkgray;
   border-radius: 0px;
   justify-content: center;
   align-items: center;
@@ -122,8 +136,49 @@ div.score-panel {
   }
 }
 .number {
-  font-size: 60px;
   text-decoration: solid;
+}
+@media only screen and (max-width: 600px) {
+  body {
+    max-width: 300px;
+    justify-content: space-between;
+  }
+  .grid {
+    width: 300px;
+    height: 300px;
+    font-size: 30px;
+  }
+  header {
+    flex-direction: column;
+    /* height: 10%; */
+  }
+  header section {
+    /* flex: 1; */
+  }
+  /* spacing is saying any child of parent get that CSS rules */
+  section.title {
+    margin-bottom: 0px;
+  }
+  section.game-options {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between;
+    align-items: flex-end;
+    align-content: space-between;
+    align-self: stretch; */
+    margin-top: 0px;
+    margin-bottom:  0px;
+  }
+  #score-panel {
+    margin-bottom: 5px;
+  }
+  #grid-size-div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .number {
+    text-decoration: solid;
+  }
 }
 
 /* could also be added via JavaScript as a form of abstraction */
@@ -140,35 +195,4 @@ div.score-panel {
   font-size: x-large;
   color: aliceblue;
 } 
-.\8 {
-  background-color: forestgreen;
-  font-size: x-large;
-}
-.\16 {
-  background-color: darkgreen;
-  font-size: x-large;
-}
-.\32 {
-  background-color: rgb(1, 50, 8);
-  font-size: x-large;
-}
-.\64 {
-  background-color: darkslategray;
-  font-size: x-large;
-}
-.\128 {
-  background-color: deeppink;
-  font-size: x-large;
-}
-.\256 {
-  background-color: firebrick;
-  font-size: x-large;
-}
-.\1028 {
-  background-color: gold;
-  font-size: x-large;
-}
-.\2048 {
-  background-color: goldenrod;
-  font-size: x-large;
-}  */
+*/

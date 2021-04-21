@@ -1,6 +1,8 @@
 // ! constructor
 const grid = document.querySelector('.grid')
+const gridCells = document.querySelectorAll('.grid div')
 const startButton = document.querySelector('#start')
+const stopButton = document.querySelector('#stop')
 const scoreScreen = document.querySelector('#score-screen')
 const bestScreen = document.querySelector('#best-screen')
 const gridSize = document.querySelector('#grid-size')
@@ -16,8 +18,7 @@ let tileB = null
 let score = 0
 let best = 0
 let allowed = true
-let combined = false
-
+// * let combined = false
 const colors = {
   '2': 'lightgreen',
   '4': 'greenyellow',
@@ -37,6 +38,21 @@ const colors = {
 // build grid
 function buildGrid() {
   width = Number(gridSize.value)
+  console.log(width)
+  if (width > 20) {
+    alert('Practice self-control, choose a number between 4 and 20')
+    return
+  } else if (width < 4) {
+    alert('Be more generous, chose a number between 4 and 20')
+    return
+  }
+  switch (true) {
+    case width > 4 && width <= 6: grid.style.fontSize = '45px'; break
+    case width > 6 && width <= 8: grid.style.fontSize = '28px'; break
+    case width > 8 && width <= 10: grid.style.fontSize = '20px'; break
+    case width > 10 && width <= 20: grid.style.fontSize = '8px'; break
+    default: grid.style.fontSize = '60px'; break
+  }
   while (grid.firstChild) {
     grid.removeChild(grid.lastChild)
   }
@@ -51,26 +67,12 @@ function buildGrid() {
     cells.push(div)
   }
 }
-// cells.forEach(cell => {
-//   cell.classList.remove('number')
-//   cell.style.backgroundColor = ''
-//   cell.innerHTML = ''
-// })
-
-// create array with all indexes of free positions
-function getFreeTileIndeces() {
-  arrayOfFreePos = []
-  cells.forEach((cell, index) => {
-    if (!cell.classList.contains('number')) {
-      arrayOfFreePos.push(index)
-    }
-  })
-}
 
 function checkIf2048() {
   cells.forEach((cell) => {
     if (cell.innerHTML === '2048') {
       alert('Win')
+      location.reload()
     }
     return
   })
@@ -91,6 +93,16 @@ function seeIfThereArePossibilities() {
     checkTilesForButtonLeft(index)
   }
   return possibility
+}
+
+// create array with all indexes of free positions
+function getFreeTileIndeces() {
+  arrayOfFreePos = []
+  cells.forEach((cell, index) => {
+    if (!cell.classList.contains('number')) {
+      arrayOfFreePos.push(index)
+    }
+  })
 }
 
 // get new random number
@@ -477,6 +489,7 @@ function move(callback, startIndex, steps) {
   if (arrayOfFreePos.length === 0) {
     if (!(seeIfThereArePossibilities())) {
       alert('Game Over!')
+      location.reload()
     }
   }
   // perform tile comparison for each row/column (width times)
@@ -489,7 +502,7 @@ function move(callback, startIndex, steps) {
 }
 
 function clearCombinedClass() {
-  cells.forEach( (cell) => {
+  cells.forEach((cell) => {
     cell.classList.remove('combined')
   })
 }
@@ -498,7 +511,9 @@ function addNewTileIfMovement() {
   if (movement) {
     getFreeTileIndeces()
     if (arrayOfFreePos.length !== 0) {
-      addTileRandomly(2)
+      for (let index = 0; index < (Math.floor(width / 2)) - 1; index++) {
+        addTileRandomly(2)
+      }
     }
     // reset movement
     movement = false
@@ -514,8 +529,8 @@ function updateBest() {
       localStorage.setItem('playersBest', best)
     }
     bestScreen.innerHTML = ` ${best}`
-  } else { 
-    return 
+  } else {
+    return
   }
 }
 
@@ -525,8 +540,7 @@ if (localStorage) {
   bestScreen.innerHTML = ` ${best}`
 }
 
-startButton.addEventListener('click', (event) => {
-
+startButton.addEventListener('click', () => {
   // ! Game Start:
   // ! set all game values to default 
   movement = false
@@ -538,12 +552,13 @@ startButton.addEventListener('click', (event) => {
   tileB = null
   score = 0
   allowed = true
-  combined = false
+  // * combined = false
   // ! remove all existing & create new grid of specified size
   buildGrid()
   // ! randomly add two tile2
-  addTileRandomly(2)
-  addTileRandomly(2)
+  for (let index = 0; index < Math.floor(width / 2); index++) {
+    addTileRandomly(2)
+  }
 
   document.addEventListener('keydown', (event) => {
     keyChoice = event.key
@@ -609,4 +624,8 @@ startButton.addEventListener('click', (event) => {
       allowed = true
     }
   })
+})
+
+stopButton.addEventListener('click', () => {
+  location.reload()
 })
