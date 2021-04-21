@@ -53,17 +53,11 @@ div.score-panel {
   width: 35px;
   font-size: 20px;
 }
-#score-screen {
-  background-color: green;
-}
-#best-screen {
-  background-color: green;
-}
 #start {
   padding: 5px;
-  background-color: green;
+  background-color: black;
   border-radius: 3px;
-  border: 3px solid green;
+  border: 3px solid black;
   color: aliceblue;
   font-size: 20px;
 }
@@ -76,12 +70,26 @@ div.score-panel {
   font-size: 20px;
   margin-right: 20px;
 }
+#score label {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+#score-screen {
+  font-size: 20px;
+}
 #best {
   padding: 5px;
   background-color: green;
   border-radius: 3px;
   border: 3px solid green;
   color: aliceblue;
+  font-size: 20px;
+}
+#best label {
+  font-size: 10px;
+  text-transform: uppercase;
+}
+#best-screen {
   font-size: 20px;
 }
 .grid {
@@ -92,6 +100,7 @@ div.score-panel {
   width: 600px;
   height: 600px;
   flex-wrap: wrap;
+  margin-bottom: 50px;
 }
 .grid div {
   display: flex;
