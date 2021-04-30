@@ -23,7 +23,7 @@ The project brief:
 
 ### Game Specifications
 
-2048 is a game where you join tiles by moving them left/right/up/down to get to 2048.
+2048 is a game where you join tiles by moving them left/right/up/down. Joined tiles value gets doubled. The goal is to get to 2048.
 
 [Check out the original game here](https://play2048.co)
 
