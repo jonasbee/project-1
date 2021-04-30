@@ -19,6 +19,7 @@ let pacman = null
 let pacmanEye = null
 let pacmanMouth = null
 let pacmanActive = false
+let intitalDelete = false
 let cells = []
 let width = 0
 let movement = false
@@ -722,10 +723,12 @@ pacButton.addEventListener('click', () => {
   if (pacmanIntervalID) {
     return
   }
+  intitalDelete = false
   // randomly add 2 strawberries on tiles
   for (let index = 0; index < (width / 2); index++) {
     randomIndex = getRandomIndexFromTileCells()
     cells[randomIndex].classList.add('pac-strawberry')
+    cells[0].classList.add('pac-strawberry')
   }
 
   // if (pacmanIntervalID) {
@@ -752,13 +755,20 @@ pacButton.addEventListener('click', () => {
   pacIndex = 0
   createPacMan(cells[pacIndex])
   if (cells[pacIndex].classList.contains('pac-strawberry')) {
-    cells[pacIndex].classList.remove('pac-strawberry')
-    cells[pacIndex].classList.remove('number')
-    cells[pacIndex].style.backgroundColor = ''
-    cells[pacIndex].innerHTML = ''
+    setTimeout(() => {
+      cells[pacIndex].classList.remove('pac-strawberry')
+      cells[pacIndex].classList.remove('number')
+      cells[pacIndex].style.backgroundColor = ''
+      cells[pacIndex].innerHTML = ''
+      intitalDelete = true
+    },100)
   }
   pacmanIntervalID = setInterval(() => {
-    deletePacMan()
+    if (!intitalDelete) {
+      deletePacMan()
+    } else {
+      intitalDelete = false
+    }
     if (pacIndex === cells.length - 1) {
       clearInterval(pacmanIntervalID)
       pacmanIntervalID = null
