@@ -751,6 +751,12 @@ pacButton.addEventListener('click', () => {
   // },250)
   pacIndex = 0
   createPacMan(cells[pacIndex])
+  if (cells[pacIndex].classList.contains('pac-strawberry')) {
+    cells[pacIndex].classList.remove('pac-strawberry')
+    cells[pacIndex].classList.remove('number')
+    cells[pacIndex].style.backgroundColor = ''
+    cells[pacIndex].innerHTML = ''
+  }
   pacmanIntervalID = setInterval(() => {
     deletePacMan()
     if (pacIndex === cells.length - 1) {

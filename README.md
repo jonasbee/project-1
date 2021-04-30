@@ -50,6 +50,8 @@ Creating the grid
 Adding tiles to start with
 - randomly add tiles on free cells
 
+<img src="./images/screenshots/start-scenario.png" alt="Start scenario of game">
+
 ### Functionality
 
 #### Moving the tiles, merge equal ones
@@ -60,7 +62,7 @@ Based on which arrow key is pressed, the computer should compare the cells and d
 
 This comparison is done per row for every column (4 times per row for 4 columns). Depending on the arrow key pressed, the starting position and steps change.
 
-`compareTwoTilesForButtonUp`: This function is to perform the comparison and is called whenever the ArrowKey Up is pressed (the same exists for Down, Left, Right)
+`compareTwoTilesForButtonUp`: This function is to perform the comparison and is called whenever the ArrowKey Up is pressed (the same function exists for Down, Left, Right). When the function is called it always compares the tile on the specified startIndex with the next on in that direction, it then recursively calls itself again (with a changed startIndex) until it reached a border.
 ```
 function compareTwoTilesForButtonUp(startIndex) {
 
@@ -157,7 +159,6 @@ To be Game Over there needs to be no option left for the player to join tiles. T
 
 ````
 function seeIfThereArePossibilities()
-
 ````
 
 
@@ -168,6 +169,8 @@ function seeIfThereArePossibilities()
 When playing the game a lot during debugging, I figured the game to be quite hard and frustrating if you repeatively cannot reach 2048. Being inspired by my other classmate's PacMan games I invented the PacMan mode for the game. 
 
 The idea is simple: As soon as you are stucked, you can activate PacMan to help you out, by eating two tiles to enable you to move and join tiles again.
+
+<img src="./images/screenshots/pac-man-mode.png" alt="PacMan mode activated">
 
 ### Potential future features
 

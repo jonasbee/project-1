@@ -30,7 +30,7 @@ h6 {
 header {
   display: flex;
   flex-direction: row;
-  height: 30%;
+  height: 300px;
   flex: 1;
 }
 header section {
@@ -42,16 +42,16 @@ section.title {
   display: flex;
   flex-direction: column;
   justify-content: start;
-  align-items: flex-start;
-  margin-bottom: 50px;
+  align-items: space-between;
+  margin-bottom: 60px;
 }
 section.game-options {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-end;
-  margin-top: 40px;
-  margin-bottom: 25px;
+  margin-top: 80px;
+  margin-bottom: 40px;
 }
 div.score-panel {
   display: flex;
@@ -59,6 +59,7 @@ div.score-panel {
 }
 #grid-size-div {
   padding: 5px;
+  /* padding-right: 15px; */
   background-color: green;
   border-radius: 3px;
   border: 1px solid green;
@@ -68,6 +69,7 @@ div.score-panel {
 #grid-size {
   width: 45px;
   font-size: 20px;
+  /* padding-left: 5px; */
 }
 #start-stop {
   display: flex;
@@ -285,27 +287,8 @@ ReactDOM {
     height: 300px;
     font-size: 30px;
   }
-  header {
-    flex-direction: column;
-    /* height: 10%; */
-  }
-  header section {
-    /* flex: 1; */
-  }
   /* spacing is saying any child of parent get that CSS rules */
-  section.title {
-    margin-bottom: 0px;
-  }
-  section.game-options {
-    display: flex;
-    flex-direction: column;
-    /* justify-content: space-between;
-    align-items: flex-end;
-    align-content: space-between;
-    align-self: stretch; */
-    margin-top: 0px;
-    margin-bottom:  0px;
-  }
+  
   #score-panel {
     margin-bottom: 5px;
   }
