@@ -1,34 +1,49 @@
-* {
+@import url('https://fonts.googleapis.com/css?family=Slabo+27px&display=swap');
+*, *:after, *:before {
   box-sizing: border-box;
   font-family: 'Nunito sans';
-  /* background-color: aliceblue; */
+  font-weight: 600;
+  /* background-color: lightgreen; */
 }
 body {
   height: 100vh;
   display: flex;
   justify-content: center;
-  /* align-items: stretch; */
+  align-items: stretch;
   flex-direction: column;
   margin: 0 auto;
   max-width: 600px;
 }
-h2 {
+#headline {
   font-size: 60px;
+  margin-bottom: 0px;
+  margin-top: 47px;
+  /* background: black; */
+  color: black;
+  /* padding: 5px; */
+  text-decoration: solid;
 }
 h6 {
   font-size: 20px;
+  margin-bottom: 10px;
 }
 header {
   display: flex;
   flex-direction: row;
   height: 30%;
+  flex: 1;
 }
 header section {
   flex: 1;
 }
-/* spacing is saying any child of parent get that CSS rules */
+/* spacing is saying any new child of parent get that CSS rules */
+/* whereas non-spaced <html-element>.<class name> is targeting all existing*/
 section.title {
-  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
+  margin-bottom: 50px;
 }
 section.game-options {
   display: flex;
@@ -36,7 +51,7 @@ section.game-options {
   justify-content: space-between;
   align-items: flex-end;
   margin-top: 40px;
-  margin-bottom:  25px;
+  margin-bottom: 25px;
 }
 div.score-panel {
   display: flex;
@@ -74,6 +89,54 @@ div.score-panel {
   font-size: 20px;
   margin-right: 20px;
 }
+#pacman-mode {
+  padding: 5px;
+  background-color: darkgray;
+  border-radius: 3px;
+  border: 3px solid darkgray;
+  color: aliceblue;
+  font-size: 20px;
+  margin-bottom: 150px;
+  width: 120px;
+  margin-right: 20px;
+}
+#icon {
+  height: 18px;
+  width: 18px;
+  margin-left: 7px;
+  margin-top: 5px;
+}
+.life {
+  height: 18px;
+  width: 18px;
+  margin-top: 5px;
+}
+/* #life2 {
+  height: 18px;
+  width: 18px;
+  margin-top: 5px;
+}
+#life3 {
+  height: 18px;
+  width: 18px;
+  margin-top: 5px;
+} */
+#lives {
+  padding: 5px;
+  background-color: darkgray;
+  border-radius: 3px;
+  border: 3px solid darkgray;
+  color: aliceblue;
+  font-size: 20px;
+  margin-bottom: 150px;
+  /* margin-bottom: 1500px; */
+  width: 85px;
+}
+#pac-options {
+  display: flex;
+  flex-direction: row;
+  /* margin-bottom: 150px; */
+}
 #score {
   padding: 5px;
   background-color: green;
@@ -108,20 +171,22 @@ div.score-panel {
 .grid {
   display: flex;
   flex-direction: row;
-  border: 5px solid black;
+  border: 7px solid darkgray;
   border-radius: 5px;
   width: 600px;
   height: 600px;
   flex-wrap: wrap;
   margin-bottom: 50px;
   font-size: 60px;
+  flex: 4;
 }
 .grid div {
   display: flex;
-  border: 3px solid darkgray;
+  border: 7px solid darkgray;
   border-radius: 0px;
   justify-content: center;
   align-items: center;
+  /* z-index: -2; */
 }
 .zoom-in {
   animation-duration: .3s;
@@ -138,10 +203,82 @@ div.score-panel {
 .number {
   text-decoration: solid;
 }
-@media only screen and (max-width: 600px) {
+.pac-man {
+  background-image: url('https://i.pinimg.com/originals/b4/ee/c4/b4eec4d093adbe9d8a3cbb40d024836a.png');
+  background-size: cover;
+  height: 80px;
+  width: 315px;
+  margin-top: 30px;
+  /* background-size: contain; */
+  /* z-index: 50; */
+  /* position: absolute; */
+  /* mask-image: image(url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Pacman.svg/1200px-Pacman.svg.png')); */
+}
+.pac-strawberry {
+  background-image: url('./images/cherry.png');
+  background-size: cover;
+}
+#pacman {
+  /* border-radius: 50%; */
+  /* background: #F2D648;
+  width: 100%;
+  height: 100%; */
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  /* background: radial-gradient(#F2D648 49.5px, transparent 50px); */
+  background: #F2D648;
+  position: relative;
+  margin-top: 20px;
+  border: 0px;
+  position: absolute;
+  z-index: 250;
+}
+#pacman__eye {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 20px;
+  right: 40px;
+  background: #333333;
+  border: 0px;
+}
+#pacman__mouth {
+  background: #000;
+  /* opacity: .1; */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  animation-name: eat;
+  animation-duration: 0.7s;
+  animation-iteration-count: infinite;
+  border: 0px;
+}
+@keyframes eat {
+  0% {
+    clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+  25% {
+    clip-path: polygon(100% 60%, 44% 48%, 100% 40%);
+  }
+  50% {
+    clip-path: polygon(100% 50%, 44% 48%, 100% 50%);
+  }
+  75% {
+   clip-path: polygon(100% 59%, 44% 48%, 100% 35%);
+  }
+  100% {
+   clip-path: polygon(100% 74%, 44% 48%, 100% 21%);
+  }
+}
+
+ReactDOM {
   body {
     max-width: 300px;
     justify-content: space-between;
+    height: unset;
   }
   .grid {
     width: 300px;
@@ -180,6 +317,8 @@ div.score-panel {
     text-decoration: solid;
   }
 }
+
+
 
 /* could also be added via JavaScript as a form of abstraction */
 /* "number 2" */

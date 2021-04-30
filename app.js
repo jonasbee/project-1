@@ -6,11 +6,25 @@ const stopButton = document.querySelector('#stop')
 const scoreScreen = document.querySelector('#score-screen')
 const bestScreen = document.querySelector('#best-screen')
 const gridSize = document.querySelector('#grid-size')
+const pacButton = document.querySelector('#pacman-mode')
+const pacLivesLeft = document.querySelector('#lives')
+const lives = ['life1', 'life2', 'life3']
+const headline = document.querySelector('#headline')
+const testButton = document.querySelector('#test')
+let lifeToReduce = null
+let pacmanIntervalID = null
+let pacIndex = 0
+let pacmanLives = 3
+let pacman = null
+let pacmanEye = null
+let pacmanMouth = null
+let pacmanActive = false
 let cells = []
 let width = 0
 let movement = false
 let possibility = true
 let arrayOfFreePos = []
+let arrayOfNonFreePos = []
 let randomIndex = 0
 let keyChoice = null
 let tileA = null
@@ -18,6 +32,7 @@ let tileB = null
 let score = 0
 let best = 0
 let allowed = true
+let gameStopped = true
 // * let combined = false
 const colors = {
   '2': 'lightgreen',
@@ -38,7 +53,6 @@ const colors = {
 // build grid
 function buildGrid() {
   width = Number(gridSize.value)
-  console.log(width)
   if (width > 20) {
     alert('Practice self-control, choose a number between 4 and 20')
     return
@@ -51,8 +65,9 @@ function buildGrid() {
     case width > 6 && width <= 8: grid.style.fontSize = '28px'; break
     case width > 8 && width <= 10: grid.style.fontSize = '20px'; break
     case width > 10 && width <= 20: grid.style.fontSize = '8px'; break
-    default: grid.style.fontSize = '60px'; break
+    default: break
   }
+  // grid.style.fontSize = '60px'
   while (grid.firstChild) {
     grid.removeChild(grid.lastChild)
   }
@@ -103,6 +118,21 @@ function getFreeTileIndeces() {
       arrayOfFreePos.push(index)
     }
   })
+}
+
+function getTileIndeces() {
+  arrayOfNonFreePos = []
+  cells.forEach((cell, index) => {
+    if (cell.classList.contains('number')) {
+      arrayOfNonFreePos.push(index)
+    }
+  })
+}
+
+function getRandomIndexFromTileCells() {
+  getTileIndeces()
+  randomIndex = Math.floor(Math.random() * arrayOfNonFreePos.length)
+  return arrayOfNonFreePos[randomIndex]
 }
 
 // get new random number
@@ -488,8 +518,22 @@ function move(callback, startIndex, steps) {
   getFreeTileIndeces()
   if (arrayOfFreePos.length === 0) {
     if (!(seeIfThereArePossibilities())) {
-      alert('Game Over!')
-      location.reload()
+      // ! activate pacman should pulse & be able to be clicked
+      // ! maybe also turned black from gray
+      // ! check if pacman lives left
+      if (pacmanLives > 0) {
+        // ! activate pacman button visually
+        pacButton.style.backgroundColor = 'black'
+        pacButton.style.borderColor = 'black'
+        pacLivesLeft.style.backgroundColor = 'black'
+        pacLivesLeft.style.borderColor = 'black'
+        doAnimation(pacButton)
+        // ! activate pacman button logically
+        pacmanActive = true
+      } else {
+        alert('Game Over! You lost all pacman lives')
+        location.reload()
+      }
     }
   }
   // perform tile comparison for each row/column (width times)
@@ -534,6 +578,31 @@ function updateBest() {
   }
 }
 
+function createPacMan(currentCell) {
+  pacman = document.createElement('div')
+  currentCell.appendChild(pacman)
+  pacman.setAttribute('id', 'pacman')
+  pacmanEye = document.createElement('div')
+  pacman.appendChild(pacmanEye)
+  pacmanEye.setAttribute('id', 'pacman__eye')
+  pacmanMouth = document.createElement('div')
+  pacman.appendChild(pacmanMouth)
+  pacmanMouth.setAttribute('id', 'pacman__mouth')
+}
+
+function deletePacMan() {
+  while (pacman.firstChild) {
+    pacman.removeChild(pacman.lastChild)
+  }
+  pacman.parentNode.removeChild(pacman)
+}
+
+function testLimits() {
+  for (let index = 0; index < Math.floor(width / 2); index++) {
+    addTileRandomly(2 + index)
+  }
+}
+
 // ! get playersBest from localStorage
 if (localStorage) {
   best = localStorage.getItem('playersBest') ?? 0
@@ -542,6 +611,13 @@ if (localStorage) {
 
 startButton.addEventListener('click', () => {
   // ! Game Start:
+  // ! check if game was stopped
+  if (!gameStopped) {
+    alert('Please Stop Game first')
+    return
+  } else {
+    gameStopped = false
+  }
   // ! set all game values to default 
   movement = false
   possibility = true
@@ -552,6 +628,7 @@ startButton.addEventListener('click', () => {
   tileB = null
   score = 0
   allowed = true
+  pacmanLives = 3
   // * combined = false
   // ! remove all existing & create new grid of specified size
   buildGrid()
@@ -559,7 +636,7 @@ startButton.addEventListener('click', () => {
   for (let index = 0; index < Math.floor(width / 2); index++) {
     addTileRandomly(2)
   }
-
+  // ! activate eventListener to arrows
   document.addEventListener('keydown', (event) => {
     keyChoice = event.key
     if (keyChoice === 'ArrowUp') {
@@ -628,4 +705,75 @@ startButton.addEventListener('click', () => {
 
 stopButton.addEventListener('click', () => {
   location.reload()
+  gameStopped = true
+})
+
+testButton.addEventListener('click', () => {
+  testLimits()
+})
+
+pacButton.addEventListener('click', () => {
+
+  // headline.classList.add('pac-man')
+  // ! check if pacman active
+  if (!pacmanActive) {
+    return
+  }
+  if (pacmanIntervalID) {
+    return
+  }
+  // randomly add 2 strawberries on tiles
+  for (let index = 0; index < (width / 2); index++) {
+    randomIndex = getRandomIndexFromTileCells()
+    cells[randomIndex].classList.add('pac-strawberry')
+  }
+
+  // if (pacmanIntervalID) {
+  //   return
+  // }
+  // pacIndex = 0
+  // cells[pacIndex].classList.add('pac-man')
+  // pacmanIntervalID = setInterval( () => {
+  //   cells[pacIndex].classList.remove('pac-man')
+  //   if (pacIndex === cells.length - 1) {
+  //     clearInterval(pacmanIntervalID)
+  //     pacmanIntervalID = null
+  //   } else {
+  //     pacIndex++
+  //     cells[pacIndex].classList.add('pac-man')
+  //     if (cells[pacIndex].classList.contains('pac-strawberry')) {
+  //       cells[pacIndex].classList.remove('pac-strawberry')
+  //       cells[pacIndex].classList.remove('number')
+  //       cells[pacIndex].style.backgroundColor = ''
+  //       cells[pacIndex].innerHTML = ''
+  //     }
+  //   }
+  // },250)
+  pacIndex = 0
+  createPacMan(cells[pacIndex])
+  pacmanIntervalID = setInterval(() => {
+    deletePacMan()
+    if (pacIndex === cells.length - 1) {
+      clearInterval(pacmanIntervalID)
+      pacmanIntervalID = null
+      pacButton.style.backgroundColor = 'darkgray'
+      pacButton.style.borderColor = 'darkgray'
+      pacLivesLeft.style.backgroundColor = 'darkgray'
+      pacLivesLeft.style.borderColor = 'darkgray'
+      // headline.classList.remove('pac-man')
+      lifeToReduce = document.querySelector(`#${lives[pacmanLives - 1]}`)
+      lifeToReduce.remove()
+      pacmanLives--
+    } else {
+      pacIndex++
+      if (cells[pacIndex].classList.contains('pac-strawberry')) {
+        cells[pacIndex].classList.remove('pac-strawberry')
+        cells[pacIndex].classList.remove('number')
+        cells[pacIndex].style.backgroundColor = ''
+        cells[pacIndex].innerHTML = ''
+      }
+      createPacMan(cells[pacIndex])
+    }
+  }, 300)
+  return
 })
