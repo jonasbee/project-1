@@ -10,7 +10,7 @@ const pacButton = document.querySelector('#pacman-mode')
 const pacLivesLeft = document.querySelector('#lives')
 const lives = ['life1', 'life2', 'life3']
 const headline = document.querySelector('#headline')
-const testButton = document.querySelector('#test')
+// const testButton = document.querySelector('#test')
 let lifeToReduce = null
 let pacmanIntervalID = null
 let pacIndex = 0
@@ -597,11 +597,11 @@ function deletePacMan() {
   pacman.parentNode.removeChild(pacman)
 }
 
-function testLimits() {
-  for (let index = 0; index < Math.floor(width / 2); index++) {
-    addTileRandomly(2 + index)
-  }
-}
+// function testLimits() {
+//   for (let index = 0; index < Math.floor(width / 2); index++) {
+//     addTileRandomly(2 + index)
+//   }
+// }
 
 // ! get playersBest from localStorage
 if (localStorage) {
@@ -708,9 +708,9 @@ stopButton.addEventListener('click', () => {
   gameStopped = true
 })
 
-testButton.addEventListener('click', () => {
-  testLimits()
-})
+// testButton.addEventListener('click', () => {
+//   testLimits()
+// })
 
 pacButton.addEventListener('click', () => {
 
