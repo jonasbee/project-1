@@ -40,7 +40,7 @@ The project brief:
 
 Screen options
 - Start/Stop button
-- Adjustable grid-size
+- Adjustable grid-size (between 4 and 20)
 - (Activate PacMan-mode)
 
 Creating the grid

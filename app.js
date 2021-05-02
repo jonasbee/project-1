@@ -728,7 +728,6 @@ pacButton.addEventListener('click', () => {
   for (let index = 0; index < (width / 2); index++) {
     randomIndex = getRandomIndexFromTileCells()
     cells[randomIndex].classList.add('pac-strawberry')
-    cells[0].classList.add('pac-strawberry')
   }
 
   // if (pacmanIntervalID) {
