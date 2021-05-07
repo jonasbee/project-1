@@ -5,6 +5,22 @@
   font-weight: 600;
   /* background-color: lightgreen; */
 }
+
+
+/* color: lightgreen;
+  color: greenyellow;
+  color: lawngreen;
+  color: limegreen;
+  color: green;
+  color: darkgreen;
+  color: olivedrab;
+  color: darkolivegreen;
+  color: olive;
+  color: seagreen;
+  color: crimson;
+
+   */
+
 body {
   height: 100vh;
   display: flex;

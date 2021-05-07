@@ -33,6 +33,7 @@ let score = 0
 let best = 0
 let allowed = true
 let gameStopped = true
+let is2048 = false
 const colors = {
   '2': 'lightgreen',
   '4': 'greenyellow',
@@ -92,8 +93,8 @@ function buildGrid() {
 function checkIf2048() {
   cells.forEach((cell) => {
     if (cell.innerHTML === '2048') {
-      alert('Win')
-      location.reload()
+      alert('You won! You can now either continue to increase BEST or STOP and START new game')
+      is2048 = true
     }
     return
   })
@@ -521,17 +522,15 @@ function move(callback, startIndex, steps) {
   getFreeTileIndeces()
   if (arrayOfFreePos.length === 0) {
     if (!(seeIfThereArePossibilities())) {
-      // ! activate pacman should pulse & be able to be clicked
-      // ! maybe also turned black from gray
-      // ! check if pacman lives left
+      // check if pacman lives left
       if (pacmanLives > 0) {
-        // ! activate pacman button visually
+        // activate pacman button visually
         pacButton.style.backgroundColor = 'black'
         pacButton.style.borderColor = 'black'
         pacLivesLeft.style.backgroundColor = 'black'
         pacLivesLeft.style.borderColor = 'black'
         doAnimation(pacButton)
-        // ! activate pacman button logically
+        // activate pacman button logically
         pacmanActive = true
       } else {
         alert('Game Over! You lost all pacman lives')
@@ -545,7 +544,9 @@ function move(callback, startIndex, steps) {
     callback(startIndex)
     startIndex += steps
   }
-  checkIf2048()
+  if (!is2048) {
+    checkIf2048()
+  }
 }
 
 // * GAME UPDATE FUNCTIONS
@@ -611,6 +612,7 @@ if (localStorage) {
   bestScreen.innerHTML = ` ${best}`
 }
 
+// * LISTEN FOR BUTTON TO START GAME
 startButton.addEventListener('click', () => {
   // * GAME START:
 
@@ -632,6 +634,7 @@ startButton.addEventListener('click', () => {
   score = 0
   allowed = true
   pacmanLives = 3
+  is2048 = false
   // * (3) remove all existing & create new grid of specified width
   buildGrid()
   // * (4) randomly add two tile2
