@@ -63,7 +63,7 @@ Based on which arrow key is pressed, the computer should compare the cells and d
 This comparison is done per row for every column (4 times per row for 4 columns). Depending on the arrow key pressed, the starting position and steps change.
 
 `compareTwoTilesForButtonUp`: This function is to perform the comparison and is called whenever the ArrowKey Up is pressed (the same function exists for Down, Left, Right). When the function is called it always compares the tile on the specified startIndex with the next on in that direction, it then recursively calls itself again (with a changed startIndex) until it reached a border.
-```
+```js
 function compareTwoTilesForButtonUp(startIndex) {
 
 // if boarder reached, return
@@ -124,7 +124,7 @@ function compareTwoTilesForButtonUp(startIndex) {
 }
 ```
 `move`: This function has the above one as its callback function and gets called within the eventListener of the keys. Also it has the startIndex and the steps as its inputs (which vary based on the direction the play wants to join the tiles)
-```
+```js
 function move(callback, startIndex, steps) {
 
   getFreeTileIndeces()
@@ -185,3 +185,5 @@ The idea is simple: As soon as you are stucked, you can activate PacMan to help 
 - adding removing classes: made me manipulate the HTML element directly through JavaScript
 
 - different behavior on first loading of the page compared to when resetting values: forced the player to reload ("Stop" the game), before playing again
+
+- having the function auto-join tiles of same value that emerged through joining: created "combined" class, which gets added to the tile div as soon as a tile got joined within a movement. Before every joining "combined" class is checked.

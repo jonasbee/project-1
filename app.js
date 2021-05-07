@@ -1,6 +1,5 @@
-// ! constructor
+// ! CONSTRUCTOR
 const grid = document.querySelector('.grid')
-const gridCells = document.querySelectorAll('.grid div')
 const startButton = document.querySelector('#start')
 const stopButton = document.querySelector('#stop')
 const scoreScreen = document.querySelector('#score-screen')
@@ -9,7 +8,7 @@ const gridSize = document.querySelector('#grid-size')
 const pacButton = document.querySelector('#pacman-mode')
 const pacLivesLeft = document.querySelector('#lives')
 const lives = ['life1', 'life2', 'life3']
-const headline = document.querySelector('#headline')
+// * test variable
 // const testButton = document.querySelector('#test')
 let lifeToReduce = null
 let pacmanIntervalID = null
@@ -34,7 +33,6 @@ let score = 0
 let best = 0
 let allowed = true
 let gameStopped = true
-// * let combined = false
 const colors = {
   '2': 'lightgreen',
   '4': 'greenyellow',
@@ -49,11 +47,14 @@ const colors = {
   '2048': 'crimson',
 }
 
-// ! functions
+// ! FUNCTIONS
 
-// build grid
+// * BUILDING THE GRID
 function buildGrid() {
+  // get width from grid-size number input
   width = Number(gridSize.value)
+
+  // GUIDE USER TO CHOOSE VALID GRID-SIZE
   if (width > 20) {
     alert('Practice self-control, choose a number between 4 and 20')
     return
@@ -61,6 +62,7 @@ function buildGrid() {
     alert('Be more generous, chose a number between 4 and 20')
     return
   }
+  // adjust fontSize based on width chosen
   switch (true) {
     case width > 4 && width <= 6: grid.style.fontSize = '45px'; break
     case width > 6 && width <= 8: grid.style.fontSize = '28px'; break
@@ -68,22 +70,25 @@ function buildGrid() {
     case width > 10 && width <= 20: grid.style.fontSize = '8px'; break
     default: break
   }
-  // grid.style.fontSize = '60px'
+
+  // REMOVE OLD GRID
   while (grid.firstChild) {
     grid.removeChild(grid.lastChild)
   }
   cells = []
+
+  // BUILD GRID WITH WIDTH
   for (let index = 0; index < width ** 2; index++) {
     const div = document.createElement('div')
     grid.appendChild(div)
-    // show index in cells of grid
-    // div.innerHTML = index
+    // show index in cells of grid: div.innerHTML = index
     div.style.width = `${100 / width}%`
     div.style.height = `${100 / width}%`
     cells.push(div)
   }
 }
 
+// * HELPER FUNCTIONS
 function checkIf2048() {
   cells.forEach((cell) => {
     if (cell.innerHTML === '2048') {
@@ -136,7 +141,7 @@ function getRandomIndexFromTileCells() {
   return arrayOfNonFreePos[randomIndex]
 }
 
-// get new random number
+// get new random index from free cells
 function getRandomIndexFromFreeCells() {
   getFreeTileIndeces()
   randomIndex = Math.floor(Math.random() * arrayOfFreePos.length)
@@ -148,12 +153,7 @@ function addTileRandomly(tileNumber) {
   cells[randomIndex].classList.add('number')
   cells[randomIndex].style.backgroundColor = colors[tileNumber]
   cells[randomIndex].innerHTML = `${tileNumber}`
-  // cells[randomIndex].classList.add(`${tileNumber}`)
-  // console.dir(cells[randomIndex])
 }
-
-// * only chance left when all tiles numbered, is
-// * that at least two of them sum up
 
 function checkTilesForButtonUp(startIndex) {
   // if boarder reached, return
@@ -249,17 +249,24 @@ function doAnimation(object) {
   setTimeout(() => { object.classList.remove('zoom-in') }, 300)
 }
 
+function clearCombinedClass() {
+  cells.forEach((cell) => {
+    cell.classList.remove('combined')
+  })
+}
+
+// * GAME MOVEMENT FUNCTIONS
 function compareTwoTilesForButtonUp(startIndex) {
-  // if boarder reached, return
+  // IF BOARDER REACHED, RETURN
   if ((startIndex > (width ** 2) - width - 1)) {
     return
   }
   tileA = cells[startIndex]
   tileB = cells[startIndex + width]
-  // case two number tiles
+  // * CASE 1: two number tiles
   if (tileA.classList.contains('number') && tileB.classList.contains('number')) {
+    // SUBCASE: number tiles have same value
     if ((tileA.innerHTML === tileB.innerHTML) && !(tileA.classList.contains('combined')) && !(tileB.classList.contains('combined'))) {
-      // * (!combined)
       // remove tileB
       tileB.classList.remove('number')
       tileB.style.backgroundColor = ''
@@ -268,18 +275,13 @@ function compareTwoTilesForButtonUp(startIndex) {
       tileA.style.backgroundColor = colors[Number(tileA.innerHTML) * 2]
       tileA.innerHTML = `${Number(tileA.innerHTML) * 2}`
       tileA.classList.add('combined')
-      // ! animation
+      // animation
       doAnimation(tileA)
       score += Number(tileA.innerHTML)
       scoreScreen.innerHTML = ` ${score}`
       updateBest()
       movement = true
-      // * combined = true
-      // ! test here before running
-      // no ${} needed, because innerHTML is type string?
-      // tileB.classList.remove(`${tileB.innerHTML}`)
-      // tileA.classList.remove(`${tileA.innerHTML}`)
-      // tileA.classList.add(`${Number(tileA.innerHTML) * 2}`)
+      // if border not reached, decrease startIndex
       if (!(startIndex < width)) {
         compareTwoTilesForButtonUp(startIndex - width)
         return
@@ -287,10 +289,12 @@ function compareTwoTilesForButtonUp(startIndex) {
         compareTwoTilesForButtonUp(startIndex)
         return
       }
+    // SUBCASE: number tiles do not have same value
+    // continue to next tile (call function again with changed startIndex)
     } else {
       return compareTwoTilesForButtonUp(startIndex + width)
     }
-    // case first is none, second is tile
+    // * CASE 2: tileA is none, tileB is number tile
   } else if (!tileA.classList.contains('number') && tileB.classList.contains('number')) {
     // tileA gets value of tileB
     tileA.classList.add('number')
@@ -301,15 +305,13 @@ function compareTwoTilesForButtonUp(startIndex) {
     tileB.style.backgroundColor = ''
     tileB.innerHTML = ''
     movement = true
-    // tileA.classList.add(`${tileB.innerHTML}`)
-    // tileB.classList.remove(`${tileB.innerHTML}`)
     if (startIndex >= width) {
       return compareTwoTilesForButtonUp(startIndex - width)
     } else {
       return compareTwoTilesForButtonUp(startIndex + width)
     }
   } else {
-    // case tileA number, tileB none & tileA none, tileB none
+    // * CASE 3: tileA number, tileB none & tileA none, tileB none
     compareTwoTilesForButtonUp(startIndex + width)
   }
 }
@@ -546,12 +548,7 @@ function move(callback, startIndex, steps) {
   checkIf2048()
 }
 
-function clearCombinedClass() {
-  cells.forEach((cell) => {
-    cell.classList.remove('combined')
-  })
-}
-
+// * GAME UPDATE FUNCTIONS
 function addNewTileIfMovement() {
   if (movement) {
     getFreeTileIndeces()
@@ -579,6 +576,7 @@ function updateBest() {
   }
 }
 
+// * GAME EXTENSION: PACMAN MODE
 function createPacMan(currentCell) {
   pacman = document.createElement('div')
   currentCell.appendChild(pacman)
@@ -598,28 +596,32 @@ function deletePacMan() {
   pacman.parentNode.removeChild(pacman)
 }
 
+// * TEST FUNCTION
 // function testLimits() {
 //   for (let index = 0; index < Math.floor(width / 2); index++) {
 //     addTileRandomly(2 + index)
 //   }
 // }
 
-// ! get playersBest from localStorage
+// ! EXECUTION CODE
+
+// * UPDATE HIGHSCORE (from localStorage)
 if (localStorage) {
   best = localStorage.getItem('playersBest') ?? 0
   bestScreen.innerHTML = ` ${best}`
 }
 
 startButton.addEventListener('click', () => {
-  // ! Game Start:
-  // ! check if game was stopped
+  // * GAME START:
+
+  // * (1) check if game was stopped befor start
   if (!gameStopped) {
     alert('Please Stop Game first')
     return
   } else {
     gameStopped = false
   }
-  // ! set all game values to default 
+  // * (2) set all game values to default 
   movement = false
   possibility = true
   arrayOfFreePos = []
@@ -630,18 +632,17 @@ startButton.addEventListener('click', () => {
   score = 0
   allowed = true
   pacmanLives = 3
-  // * combined = false
-  // ! remove all existing & create new grid of specified size
+  // * (3) remove all existing & create new grid of specified width
   buildGrid()
-  // ! randomly add two tile2
+  // * (4) randomly add two tile2
   for (let index = 0; index < Math.floor(width / 2); index++) {
     addTileRandomly(2)
   }
-  // ! activate eventListener to arrows
+  // * (5) activate eventListener to arrow keys
   document.addEventListener('keydown', (event) => {
     keyChoice = event.key
     if (keyChoice === 'ArrowUp') {
-      if (event.repeat != undefined) {
+      if (event.repeat !== undefined) {
         allowed = !event.repeat
       }
       if (!allowed) return
@@ -650,7 +651,7 @@ startButton.addEventListener('click', () => {
       clearCombinedClass()
       setTimeout(addNewTileIfMovement, 90)
     } else if (keyChoice === 'ArrowDown') {
-      if (event.repeat != undefined) {
+      if (event.repeat !== undefined) {
         allowed = !event.repeat
       }
       if (!allowed) return
@@ -659,7 +660,7 @@ startButton.addEventListener('click', () => {
       clearCombinedClass()
       setTimeout(addNewTileIfMovement, 90)
     } else if (keyChoice === 'ArrowRight') {
-      if (event.repeat != undefined) {
+      if (event.repeat !== undefined) {
         allowed = !event.repeat
       }
       if (!allowed) return
@@ -668,7 +669,7 @@ startButton.addEventListener('click', () => {
       clearCombinedClass()
       setTimeout(addNewTileIfMovement, 90)
     } else if (keyChoice === 'ArrowLeft') {
-      if (event.repeat != undefined) {
+      if (event.repeat !== undefined) {
         allowed = !event.repeat
       }
       if (!allowed) return
@@ -678,6 +679,8 @@ startButton.addEventListener('click', () => {
       setTimeout(addNewTileIfMovement, 90)
     }
   })
+  // logic to prevent auto-repeat of keys
+  // reset allowed to true if key is "up" again
   document.addEventListener('keyup', (event) => {
     keyChoice = event.key
     if (keyChoice === 'ArrowUp') {
@@ -690,20 +693,9 @@ startButton.addEventListener('click', () => {
       allowed = true
     }
   })
-  document.addEventListener('focus', (event) => {
-    keyChoice = event.key
-    if (keyChoice === 'ArrowUp') {
-      allowed = true
-    } else if (keyChoice === 'ArrowDown') {
-      allowed = true
-    } else if (keyChoice === 'ArrowRight') {
-      allowed = true
-    } else if (keyChoice === 'ArrowLeft') {
-      allowed = true
-    }
-  })
 })
 
+// * LISTEN FOR BUTTON TO STOP AND RELOAD PAGE
 stopButton.addEventListener('click', () => {
   location.reload()
   gameStopped = true
@@ -713,44 +705,26 @@ stopButton.addEventListener('click', () => {
 //   testLimits()
 // })
 
+// * LISTEN FOR BUTTON TO ACTIVATE PACMAN
 pacButton.addEventListener('click', () => {
 
-  // headline.classList.add('pac-man')
-  // ! check if pacman active
+  // check if pacman active 
+  // if all tiles are numbered (pacman mode is allowed)
   if (!pacmanActive) {
     return
   }
+  // prevent second pacman at the same time
   if (pacmanIntervalID) {
     return
   }
   intitalDelete = false
-  // randomly add 2 strawberries on tiles
+  // randomly add 2 cherries on tiles
   for (let index = 0; index < (width / 2); index++) {
     randomIndex = getRandomIndexFromTileCells()
     cells[randomIndex].classList.add('pac-strawberry')
   }
-
-  // if (pacmanIntervalID) {
-  //   return
-  // }
-  // pacIndex = 0
-  // cells[pacIndex].classList.add('pac-man')
-  // pacmanIntervalID = setInterval( () => {
-  //   cells[pacIndex].classList.remove('pac-man')
-  //   if (pacIndex === cells.length - 1) {
-  //     clearInterval(pacmanIntervalID)
-  //     pacmanIntervalID = null
-  //   } else {
-  //     pacIndex++
-  //     cells[pacIndex].classList.add('pac-man')
-  //     if (cells[pacIndex].classList.contains('pac-strawberry')) {
-  //       cells[pacIndex].classList.remove('pac-strawberry')
-  //       cells[pacIndex].classList.remove('number')
-  //       cells[pacIndex].style.backgroundColor = ''
-  //       cells[pacIndex].innerHTML = ''
-  //     }
-  //   }
-  // },250)
+  // create initial pacman (on first cell), see if first cell
+  // contains cherry already  
   pacIndex = 0
   createPacMan(cells[pacIndex])
   if (cells[pacIndex].classList.contains('pac-strawberry')) {
@@ -762,12 +736,15 @@ pacButton.addEventListener('click', () => {
       intitalDelete = true
     },100)
   }
+  // create & delete pacman and check for cherries iteratively
   pacmanIntervalID = setInterval(() => {
     if (!intitalDelete) {
       deletePacMan()
     } else {
       intitalDelete = false
     }
+    // if pacman reached last cell, remove pacman again
+    // also unable pacman mode again & reduce pacman lives by 1
     if (pacIndex === cells.length - 1) {
       clearInterval(pacmanIntervalID)
       pacmanIntervalID = null
@@ -775,7 +752,6 @@ pacButton.addEventListener('click', () => {
       pacButton.style.borderColor = 'darkgray'
       pacLivesLeft.style.backgroundColor = 'darkgray'
       pacLivesLeft.style.borderColor = 'darkgray'
-      // headline.classList.remove('pac-man')
       lifeToReduce = document.querySelector(`#${lives[pacmanLives - 1]}`)
       lifeToReduce.remove()
       pacmanLives--
