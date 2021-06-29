@@ -34,6 +34,8 @@ The project brief:
 - JavaScript (ES6)
 - Git and GitHub
 
+---
+
 ## Approach
 
 ### Setting the foundations
@@ -172,13 +174,13 @@ The idea is simple: As soon as you are stucked, you can activate PacMan to help 
 
 <img src="./images/screenshots/pac-man-mode.png" alt="PacMan mode activated">
 
-### Potential future features
+## Potential future features
 
 - Free movement for PacMan: For the real PacMan feeling it should be possible to move PacMan and actually move him to eat the cherries. Also ghost preventing PacMan from doing so would be an idea.
 
 - Have the tiles move smoothly (as in the original game): In the original game you'll realize a smooth tile movement which is just nice to look at. Unfortunately this functionality appeared to be quite difficult to implement in JavaScript and CSS so I did not manage to add it within the time.
 
-### Lessons Learned
+## Lessons Learned
 
 - repeated key press: made me check the boolean value of keypress repetition and switch it on/off
 
